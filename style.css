@@ -222,16 +222,21 @@ body.intro-complete .hero-content {
 .map-link {
     display: inline-block;
     margin-top: 1rem;
-    color: var(--secondary-color);
+    padding: 0.8rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
     text-decoration: none;
-    border-bottom: 1px solid var(--secondary-color);
-    padding-bottom: 2px;
-    transition: color 0.3s;
+    border-radius: 5px;
+    font-family: var(--heading-font);
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .map-link:hover {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .quote {
