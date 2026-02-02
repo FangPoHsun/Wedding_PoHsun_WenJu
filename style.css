@@ -219,6 +219,18 @@ body.intro-complete .hero-content {
     font-size: 1.1rem;
 }
 
+.venue-intro {
+    font-size: 0.95rem;
+    color: #666;
+    font-style: italic;
+    line-height: 1.7;
+    margin: 0.8rem 0 1rem;
+    padding: 0.8rem;
+    background-color: rgba(178, 172, 136, 0.1);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 0 5px 5px 0;
+}
+
 .map-link {
     display: inline-block;
     margin-top: 1rem;
