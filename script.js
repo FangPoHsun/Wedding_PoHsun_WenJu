@@ -166,13 +166,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         musicBtn.addEventListener('click', toggleMusic);
 
-        // Welcome overlay click handler - starts music and hides overlay
-        if (welcomeOverlay) {
-            welcomeOverlay.addEventListener('click', () => {
-                welcomeOverlay.classList.add('hidden');
-                bgMusic.play().then(() => {
-                    updateMusicUI(true);
-                }).catch(e => console.log('Audio play failed:', e));
+        // Envelope click handler - opens envelope, then starts music
+        const envelope = document.getElementById('envelope');
+        if (welcomeOverlay && envelope) {
+            envelope.addEventListener('click', () => {
+                // First, open the envelope
+                envelope.classList.add('opened');
+                welcomeOverlay.classList.add('opened');
+
+                // After animation completes, hide overlay and start music
+                setTimeout(() => {
+                    welcomeOverlay.classList.add('hidden');
+                    bgMusic.play().then(() => {
+                        updateMusicUI(true);
+                    }).catch(e => console.log('Audio play failed:', e));
+                }, 1500);
             });
         }
     }
