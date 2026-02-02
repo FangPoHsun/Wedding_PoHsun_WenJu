@@ -269,7 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const relationshipMap = {
                 'groom_side': '家人/親戚',
                 'bride_side': '朋友',
-                'common_friend': '同事'
+                'common_friend': '同事',
+                'parents_friend': '父母的親朋好友'
             };
             submissionData.append('entry.476014869', relationshipMap[formData.get('relationship')] || '朋友');
 
