@@ -14,21 +14,87 @@
 </head>
 
 <body>
-    <!-- Welcome Overlay - Envelope -->
-    <div class="welcome-overlay" id="welcomeOverlay">
-        <p class="envelope-hint">Click the envelope to open</p>
-        <div class="envelope" id="envelope">
-            <!-- Envelope flap (triangle) -->
-            <div class="envelope-flap"></div>
-            <!-- Envelope body -->
-            <div class="envelope-body">
-                <!-- Letter/Card inside -->
-                <div class="envelope-letter">
-                    <p class="letter-subtitle">You're Invited</p>
-                    <h1 class="letter-title">WenJu & PoHsun</h1>
-                    <div class="letter-divider"></div>
-                    <p class="letter-date">2026.05.02</p>
+    <!-- Welcome Overlay - Romantic Gatefold Experience -->
+    <div class="gatefold-overlay" id="welcomeOverlay">
+
+        <!-- Floating Hearts Background -->
+        <div class="floating-hearts" aria-hidden="true">
+            <div class="heart heart-1">♥</div>
+            <div class="heart heart-2">♥</div>
+            <div class="heart heart-3">♥</div>
+            <div class="heart heart-4">♥</div>
+            <div class="heart heart-5">♥</div>
+            <div class="heart heart-6">♥</div>
+            <div class="heart heart-7">♥</div>
+            <div class="heart heart-8">♥</div>
+            <div class="petal petal-1"></div>
+            <div class="petal petal-2"></div>
+            <div class="petal petal-3"></div>
+            <div class="petal petal-4"></div>
+            <div class="petal petal-5"></div>
+            <div class="petal petal-6"></div>
+        </div>
+
+        <!-- Left Gate Panel -->
+        <div class="gate-panel left-panel">
+            <div class="panel-content">
+                <div class="decorative-corner top-left"></div>
+                <div class="decorative-corner bottom-left"></div>
+                <!-- Floral Flourish -->
+                <div class="floral-flourish left-flourish">
+                    <svg viewBox="0 0 100 200" class="flourish-svg">
+                        <path d="M50 0 Q30 50 50 100 Q70 150 50 200" fill="none" stroke="currentColor" stroke-width="1"/>
+                        <circle cx="50" cy="50" r="8" fill="currentColor" opacity="0.3"/>
+                        <circle cx="35" cy="80" r="5" fill="currentColor" opacity="0.2"/>
+                        <circle cx="65" cy="120" r="6" fill="currentColor" opacity="0.25"/>
+                        <circle cx="45" cy="150" r="4" fill="currentColor" opacity="0.2"/>
+                    </svg>
                 </div>
+            </div>
+        </div>
+
+        <!-- Right Gate Panel -->
+        <div class="gate-panel right-panel">
+            <div class="panel-content">
+                <div class="decorative-corner top-right"></div>
+                <div class="decorative-corner bottom-right"></div>
+                <!-- Floral Flourish -->
+                <div class="floral-flourish right-flourish">
+                    <svg viewBox="0 0 100 200" class="flourish-svg">
+                        <path d="M50 0 Q70 50 50 100 Q30 150 50 200" fill="none" stroke="currentColor" stroke-width="1"/>
+                        <circle cx="50" cy="50" r="8" fill="currentColor" opacity="0.3"/>
+                        <circle cx="65" cy="80" r="5" fill="currentColor" opacity="0.2"/>
+                        <circle cx="35" cy="120" r="6" fill="currentColor" opacity="0.25"/>
+                        <circle cx="55" cy="150" r="4" fill="currentColor" opacity="0.2"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Central Content (sits on top of gates) -->
+        <div class="intro-content">
+            <div class="romantic-frame">
+                <p class="intro-subtitle">The Wedding Of</p>
+                <h1 class="intro-title">
+                    <span class="name-glow">WenJu</span>
+                    <span class="amp">&</span>
+                    <span class="name-glow">PoHsun</span>
+                </h1>
+                <p class="intro-date">2026.05.02</p>
+                <p class="romantic-quote">"Two souls, one heart, forever entwined"</p>
+            </div>
+
+            <!-- Wax Seal Button with Sparkle Effect -->
+            <div class="wax-seal-container">
+                <div class="sparkle-ring"></div>
+                <button class="wax-seal-button" id="enterBtn" aria-label="Open Invitation">
+                    <span class="seal-text">W&P</span>
+                    <span class="click-hint">Open</span>
+                </button>
+                <div class="sparkle sparkle-1"></div>
+                <div class="sparkle sparkle-2"></div>
+                <div class="sparkle sparkle-3"></div>
+                <div class="sparkle sparkle-4"></div>
             </div>
         </div>
     </div>
@@ -178,19 +244,32 @@
                         <option value="" disabled selected>請選擇 Please Select</option>
                         <option value="driving">自行開車 (Driving)</option>
                         <option value="public_transport">大眾運輸 (Public Transport)</option>
+                        <option value="carpool">共乘 (Carpool)</option>
                         <option value="other">其他 (Other)</option>
                     </select>
                 </div>
 
+                <div class="form-group" id="transportationOtherGroup" style="display: none;">
+                    <label for="transportation_other">請說明交通方式 (Please specify)</label>
+                    <input type="text" id="transportation_other" name="transportation_other" placeholder="請輸入您的交通方式">
+                </div>
+
                 <div class="form-group">
-                    <label for="diet">飲食習慣 (Dietary Requirements)</label>
-                    <select id="diet" name="diet">
-                        <option value="standard">葷食 (Standard)</option>
-                        <option value="vegetarian">素食 (Vegetarian)</option>
-                        <option value="no_beef">不吃牛 (No Beef)</option>
-                        <option value="no_seafood">不吃海鮮 (No Seafood)</option>
-                        <option value="other">其他 (Other - please specify in message)</option>
+                    <label for="diet">飲食習慣 (Diet) *</label>
+                    <select id="diet" name="diet" required>
+                        <option value="standard">葷 (Standard)</option>
+                        <option value="vegetarian">素 (Vegetarian)</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="diet_special">特殊飲食需求 (Special Dietary Requirements)</label>
+                    <input type="text" id="diet_special" name="diet_special" placeholder="例如：甲殼類過敏、不吃牛、不吃海鮮等，若無請填「無」">
+                </div>
+
+                <div class="form-group">
+                    <label for="seating">座位安排需求 (偷偷告訴我想跟誰坐，不想跟誰坐)</label>
+                    <textarea id="seating" name="seating" rows="3" placeholder="若無請填「無」"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -223,11 +302,11 @@
     <button class="music-btn" id="musicBtn" aria-label="Toggle music">
         <span class="music-icon" id="musicIcon">
             <svg class="music-on" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
-                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
             </svg>
             <svg class="music-off" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                <path d="M2 4l18 18" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+                <path d="M2 4l18 18" stroke="currentColor" stroke-width="2" />
             </svg>
         </span>
     </button>

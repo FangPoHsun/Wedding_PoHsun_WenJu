@@ -166,23 +166,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
         musicBtn.addEventListener('click', toggleMusic);
 
-        // Envelope click handler - opens envelope, then starts music
-        const envelope = document.getElementById('envelope');
-        if (welcomeOverlay && envelope) {
-            envelope.addEventListener('click', () => {
-                // First, open the envelope
-                envelope.classList.add('opened');
-                welcomeOverlay.classList.add('opened');
+        // Gatefold Opening Experience
+        const enterBtn = document.getElementById('enterBtn');
+        const overlay = document.getElementById('welcomeOverlay');
 
-                // After animation completes, hide overlay and start music
+        if (overlay && enterBtn) {
+            enterBtn.addEventListener('click', () => {
+                // Return if already active
+                if (overlay.classList.contains('opened')) return;
+
+                // 1. Trigger Open Animation (CSS handles the sliding)
+                overlay.classList.add('opened');
+
+                // 2. Play music immediately for effect
+                bgMusic.play().then(() => {
+                    updateMusicUI(true);
+                    // Fade in volume nicely
+                    bgMusic.volume = 0;
+                    let vol = 0;
+                    const interval = setInterval(() => {
+                        if (vol < 0.6) {
+                            vol += 0.05;
+                            bgMusic.volume = vol;
+                        } else {
+                            clearInterval(interval);
+                        }
+                    }, 200);
+                }).catch(e => console.log('Audio play failed:', e));
+
+                // 3. Start fading in main content as gates begin to open
                 setTimeout(() => {
-                    welcomeOverlay.classList.add('hidden');
-                    bgMusic.play().then(() => {
-                        updateMusicUI(true);
-                    }).catch(e => console.log('Audio play failed:', e));
+                    document.body.classList.add('intro-complete');
+                }, 300);
+
+                // 4. Cleanup overlay after gates fully open
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
                 }, 1500);
             });
         }
+    }
+
+    // Transportation "Other" toggle
+    const transportationSelect = document.getElementById('transportation');
+    const transportationOtherGroup = document.getElementById('transportationOtherGroup');
+    const transportationOtherInput = document.getElementById('transportation_other');
+
+    if (transportationSelect && transportationOtherGroup) {
+        transportationSelect.addEventListener('change', () => {
+            if (transportationSelect.value === 'other') {
+                transportationOtherGroup.style.display = 'block';
+                transportationOtherInput.required = true;
+            } else {
+                transportationOtherGroup.style.display = 'none';
+                transportationOtherInput.required = false;
+                transportationOtherInput.value = '';
+            }
+        });
     }
 
     // Form Submission Handler
@@ -237,9 +277,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const transportMap = {
                 'driving': '自行開車',
                 'public_transport': '大眾交通工具',
-                'other': '共乘' // Mapping 'other' to Carpool/Other logic
+                'carpool': '共乘',
+                'other': '__other_option__'
             };
-            submissionData.append('entry.1923962083', transportMap[formData.get('transportation')] || '');
+            const transportValue = formData.get('transportation');
+            const transportText = transportMap[transportValue] || '';
+            submissionData.append('entry.1923962083', transportText);
+
+            // If "other" is selected, send the custom text to the other_option_response field
+            if (transportValue === 'other' && formData.get('transportation_other')) {
+                submissionData.append('entry.1923962083.other_option_response', formData.get('transportation_other'));
+            }
 
             // entry.160528149 = Diet (Main)
             // entry.1121186166 = Diet (Special)
@@ -250,8 +298,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 submissionData.append('entry.160528149', '葷');
             }
 
-            if (diet === 'no_beef' || diet === 'no_seafood' || diet === 'other') {
-                submissionData.append('entry.1121186166', diet); // Using the value as the special request
+            // Special dietary requirements
+            const dietSpecial = formData.get('diet_special');
+            if (dietSpecial && dietSpecial.trim() !== '') {
+                submissionData.append('entry.1121186166', dietSpecial.trim());
+            } else {
+                submissionData.append('entry.1121186166', '無');
+            }
+
+            // entry.1854135250 = Seating Preference (座位安排需求)
+            const seatingPref = formData.get('seating');
+            if (seatingPref && seatingPref.trim() !== '') {
+                submissionData.append('entry.1854135250', seatingPref.trim());
+            } else {
+                submissionData.append('entry.1854135250', '無');
             }
 
             // entry.1846393893 = Message
