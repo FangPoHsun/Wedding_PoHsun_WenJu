@@ -140,8 +140,16 @@ body.intro-complete .hero-content {
 .date {
     font-size: 2rem;
     font-family: var(--heading-font);
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     letter-spacing: 2px;
+}
+
+.schedule {
+    font-size: 1.1rem;
+    font-family: var(--heading-font);
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+    opacity: 0.9;
 }
 
 .cta-button {
