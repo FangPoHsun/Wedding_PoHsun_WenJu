@@ -1351,6 +1351,42 @@ footer {
     }
 }
 
+/* Click Instruction Text */
+.click-instruction {
+    margin-top: 2rem;
+    font-family: var(--body-font);
+    font-size: 1rem;
+    color: #8a7a6a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    animation: fadeInUp 1.8s ease-out, bounce-hint 2s infinite ease-in-out 2s;
+}
+
+.tap-icon {
+    font-size: 1.3rem;
+    animation: tap-bounce 1.5s infinite ease-in-out;
+}
+
+@keyframes tap-bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes bounce-hint {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
 @keyframes pulse-seal {
     0%, 100% {
         transform: scale(1);
@@ -1470,6 +1506,15 @@ footer {
         letter-spacing: 1.5px;
     }
 
+    .click-instruction {
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .tap-icon {
+        font-size: 1.1rem;
+    }
+
     .sparkle-ring {
         width: 100px;
         height: 100px;
@@ -1544,6 +1589,11 @@ footer {
     .sparkle-ring {
         width: 85px;
         height: 85px;
+    }
+
+    .click-instruction {
+        margin-top: 1rem;
+        font-size: 0.8rem;
     }
 }
 
