@@ -127,8 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // Background Music Control
+    // Welcome Overlay & Background Music Control
     // ==========================================
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
     const bgMusic = document.getElementById('bgMusic');
     const musicBtn = document.getElementById('musicBtn');
     const musicOnIcon = document.querySelector('.music-on');
@@ -165,19 +166,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         musicBtn.addEventListener('click', toggleMusic);
 
-        // Try to auto-play immediately (will work if user has interacted before)
-        bgMusic.play().then(() => {
-            updateMusicUI(true);
-        }).catch(() => {
-            // Auto-play blocked, wait for user interaction
-            const startMusic = () => {
-                bgMusic.play().then(() => updateMusicUI(true)).catch(() => {});
-                document.removeEventListener('click', startMusic);
-                document.removeEventListener('touchstart', startMusic);
-            };
-            document.addEventListener('click', startMusic, { once: true });
-            document.addEventListener('touchstart', startMusic, { once: true });
-        });
+        // Welcome overlay click handler - starts music and hides overlay
+        if (welcomeOverlay) {
+            welcomeOverlay.addEventListener('click', () => {
+                welcomeOverlay.classList.add('hidden');
+                bgMusic.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(e => console.log('Audio play failed:', e));
+            });
+        }
     }
 
     // Form Submission Handler
