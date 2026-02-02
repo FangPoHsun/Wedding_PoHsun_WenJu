@@ -1307,22 +1307,14 @@ footer {
 }
 
 .seal-text {
-    font-family: var(--accent-font);
-    font-size: 2rem;
+    font-family: var(--heading-font);
+    font-size: 1.1rem;
     color: #5a3d0a;
     font-weight: bold;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
-    line-height: 1;
-}
-
-.click-hint {
-    font-family: var(--heading-font);
-    font-size: 0.55rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #6a4a1a;
-    margin-top: 6px;
-    opacity: 0.8;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    line-height: 1;
 }
 
 /* Sparkle Effects */
@@ -1498,12 +1490,7 @@ footer {
     }
 
     .seal-text {
-        font-size: 1.6rem;
-    }
-
-    .click-hint {
-        font-size: 0.5rem;
-        letter-spacing: 1.5px;
+        font-size: 0.9rem;
     }
 
     .click-instruction {
@@ -1583,7 +1570,7 @@ footer {
     }
 
     .seal-text {
-        font-size: 1.4rem;
+        font-size: 0.8rem;
     }
 
     .sparkle-ring {
