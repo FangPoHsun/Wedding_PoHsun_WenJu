@@ -231,6 +231,50 @@ body.intro-complete .hero-content {
     border-radius: 0 5px 5px 0;
 }
 
+.venue-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    justify-content: center;
+}
+
+.feature-tag {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, rgba(178, 172, 136, 0.15), rgba(212, 175, 55, 0.1));
+    border: 1px solid rgba(178, 172, 136, 0.3);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.feature-tag:hover {
+    background: linear-gradient(135deg, rgba(178, 172, 136, 0.25), rgba(212, 175, 55, 0.2));
+    transform: translateY(-2px);
+}
+
+.venue-gallery-link {
+    display: inline-block;
+    margin: 0.8rem 0;
+    padding: 0.6rem 1.2rem;
+    background-color: transparent;
+    color: var(--secondary-color);
+    text-decoration: none;
+    border: 2px solid var(--secondary-color);
+    border-radius: 25px;
+    font-family: var(--heading-font);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.venue-gallery-link:hover {
+    background-color: var(--secondary-color);
+    color: white;
+    transform: scale(1.05);
+}
+
 .map-link {
     display: inline-block;
     margin-top: 1rem;
