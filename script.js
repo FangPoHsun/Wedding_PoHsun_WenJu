@@ -317,10 +317,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // entry.1846393893 = Message
             submissionData.append('entry.1846393893', formData.get('message'));
 
-            // entry.1618896703 = Ceremony Attendance (Default to "尚未確定" if not asked, or assume Yes if coming)
-            if (formData.get('attendance') === 'attending') {
-                submissionData.append('entry.1618896703', '會');
-            }
+            // entry.1618896703 = Ceremony Attendance (是否參加證婚儀式)
+            const ceremonyMap = {
+                'yes': '會',
+                'no': '不會',
+                'undecided': '尚未確定'
+            };
+            const ceremonyValue = formData.get('ceremony');
+            submissionData.append('entry.1618896703', ceremonyMap[ceremonyValue] || '尚未確定');
 
             // UI Feedback
             const submitBtn = form.querySelector('.submit-button');
