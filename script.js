@@ -250,11 +250,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // entry.663585314 = Email
             submissionData.append('entry.663585314', formData.get('email'));
 
-            // entry.XXXXXXXXX = Address (聯絡地址)
-            // TODO: Replace XXXXXXXXX with your Google Form entry ID for the address field
+            // entry.498499883 = Address (聯絡地址)
             const addressValue = formData.get('address');
             if (addressValue && addressValue.trim() !== '') {
-                submissionData.append('entry.XXXXXXXXX', addressValue.trim());
+                submissionData.append('entry.498499883', addressValue.trim());
             }
 
             // entry.1521057408 = Attendance (Yes/No)
