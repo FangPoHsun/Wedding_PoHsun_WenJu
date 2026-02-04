@@ -250,6 +250,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // entry.663585314 = Email
             submissionData.append('entry.663585314', formData.get('email'));
 
+            // entry.XXXXXXXXX = Address (聯絡地址)
+            // TODO: Replace XXXXXXXXX with your Google Form entry ID for the address field
+            const addressValue = formData.get('address');
+            if (addressValue && addressValue.trim() !== '') {
+                submissionData.append('entry.XXXXXXXXX', addressValue.trim());
+            }
+
             // entry.1521057408 = Attendance (Yes/No)
             const attendanceMap = {
                 'attending': '是，我會參加',
@@ -333,6 +340,9 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerText = 'Sending...';
             submitBtn.disabled = true;
 
+            // Store attendance value before form reset
+            const isAttending = formData.get('attendance') === 'attending';
+
             fetch(FORM_URL, {
                 method: 'POST',
                 body: submissionData,
@@ -347,7 +357,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         submitBtn.disabled = false;
                         submitBtn.style.backgroundColor = '';
                     }, 3000);
-                    alert('Thank you! Your response has been saved to the Google Form.');
+
+                    // If attending, offer to add to calendar
+                    if (isAttending) {
+                        showCalendarModal();
+                    } else {
+                        alert('感謝您的回覆！Thank you for your response!');
+                    }
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -357,4 +373,157 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         });
     }
+
+    // ==========================================
+    // Calendar Integration Functions
+    // ==========================================
+
+    // Wedding event details
+    const weddingEvent = {
+        title: 'WenJu & PoHsun 婚禮',
+        description: '汶如 & 柏勛 的婚禮\n\n證婚儀式: 10:30 AM\n婚宴開席: 12:00 PM\n\n地點: 薇絲山庭戶外婚禮莊園\n地址: 303新竹縣湖口鄉長安路361巷',
+        location: '薇絲山庭戶外婚禮莊園, 303新竹縣湖口鄉長安路361巷',
+        startDate: '2026-05-02',
+        startTime: '10:30',
+        endDate: '2026-05-02',
+        endTime: '15:00'
+    };
+
+    // Generate Google Calendar URL
+    function generateGoogleCalendarUrl() {
+        const startDateTime = weddingEvent.startDate.replace(/-/g, '') + 'T' + weddingEvent.startTime.replace(':', '') + '00';
+        const endDateTime = weddingEvent.endDate.replace(/-/g, '') + 'T' + weddingEvent.endTime.replace(':', '') + '00';
+
+        const params = new URLSearchParams({
+            action: 'TEMPLATE',
+            text: weddingEvent.title,
+            dates: `${startDateTime}/${endDateTime}`,
+            details: weddingEvent.description,
+            location: weddingEvent.location,
+            ctz: 'Asia/Taipei'
+        });
+
+        return `https://calendar.google.com/calendar/render?${params.toString()}`;
+    }
+
+    // Generate ICS file content
+    function generateICSContent() {
+        const formatDate = (date, time) => {
+            return date.replace(/-/g, '') + 'T' + time.replace(':', '') + '00';
+        };
+
+        const escapeText = (text) => {
+            return text.replace(/\n/g, '\\n').replace(/,/g, '\\,').replace(/;/g, '\\;');
+        };
+
+        const icsContent = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//WenJu & PoHsun Wedding//EN',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
+            'BEGIN:VTIMEZONE',
+            'TZID:Asia/Taipei',
+            'X-LIC-LOCATION:Asia/Taipei',
+            'BEGIN:STANDARD',
+            'TZOFFSETFROM:+0800',
+            'TZOFFSETTO:+0800',
+            'TZNAME:CST',
+            'DTSTART:19700101T000000',
+            'END:STANDARD',
+            'END:VTIMEZONE',
+            'BEGIN:VEVENT',
+            `DTSTART;TZID=Asia/Taipei:${formatDate(weddingEvent.startDate, weddingEvent.startTime)}`,
+            `DTEND;TZID=Asia/Taipei:${formatDate(weddingEvent.endDate, weddingEvent.endTime)}`,
+            `SUMMARY:${escapeText(weddingEvent.title)}`,
+            `DESCRIPTION:${escapeText(weddingEvent.description)}`,
+            `LOCATION:${escapeText(weddingEvent.location)}`,
+            'STATUS:CONFIRMED',
+            `UID:wenju-pohsun-wedding-2026@wedding.com`,
+            'END:VEVENT',
+            'END:VCALENDAR'
+        ].join('\r\n');
+
+        return icsContent;
+    }
+
+    // Download ICS file
+    function downloadICS() {
+        const icsContent = generateICSContent();
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'WenJu_PoHsun_Wedding.ics';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
+
+    // Show calendar modal
+    function showCalendarModal() {
+        // Create modal if it doesn't exist
+        let modal = document.getElementById('calendarModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'calendarModal';
+            modal.className = 'calendar-modal';
+            modal.innerHTML = `
+                <div class="calendar-modal-content">
+                    <h3>感謝您的回覆！</h3>
+                    <p>您要將婚禮加入行事曆嗎？</p>
+                    <div class="calendar-buttons">
+                        <button class="calendar-btn google-cal" id="addGoogleCal">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M19.5 3h-15A1.5 1.5 0 003 4.5v15A1.5 1.5 0 004.5 21h15a1.5 1.5 0 001.5-1.5v-15A1.5 1.5 0 0019.5 3zm-9 15h-3v-6h3v6zm0-8h-3V7h3v3zm4.5 8h-3V10h3v8zm0-10h-3V7h3v1zm4.5 10h-3v-4h3v4zm0-6h-3V7h3v5z"/>
+                            </svg>
+                            Google 日曆
+                        </button>
+                        <button class="calendar-btn apple-cal" id="downloadICS">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                            下載行事曆檔案 (.ics)
+                        </button>
+                    </div>
+                    <button class="calendar-btn skip-btn" id="skipCalendar">稍後再說</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Add event listeners
+            document.getElementById('addGoogleCal').addEventListener('click', () => {
+                window.open(generateGoogleCalendarUrl(), '_blank');
+                closeCalendarModal();
+            });
+
+            document.getElementById('downloadICS').addEventListener('click', () => {
+                downloadICS();
+                closeCalendarModal();
+            });
+
+            document.getElementById('skipCalendar').addEventListener('click', closeCalendarModal);
+
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeCalendarModal();
+            });
+        }
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close calendar modal
+    function closeCalendarModal() {
+        const modal = document.getElementById('calendarModal');
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Make functions globally accessible
+    window.showCalendarModal = showCalendarModal;
+    window.closeCalendarModal = closeCalendarModal;
 });
