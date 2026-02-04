@@ -250,12 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // entry.663585314 = Email
             submissionData.append('entry.663585314', formData.get('email'));
 
-            // entry.498499883 = Address (聯絡地址)
-            const addressValue = formData.get('address');
-            if (addressValue && addressValue.trim() !== '') {
-                submissionData.append('entry.498499883', addressValue.trim());
-            }
-
             // entry.1521057408 = Attendance (Yes/No)
             const attendanceMap = {
                 'attending': '是，我會參加',
